@@ -13,7 +13,7 @@ let parsedSocks5Address = {};
 let enableSocks = false;
 
 let noTLS = 'false';
-const expire = 4102329600;//2099-12-31维改吃饭啦
+const expire = 4102329600;//2099-12-31仅把维列斯改成吃饭啦
 let proxyIPs;
 let socks5s;
 let go2Socks5s = [
