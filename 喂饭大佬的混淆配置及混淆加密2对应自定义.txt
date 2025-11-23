@@ -1,0 +1,32 @@
+喂饭大佬的混淆配置：
+--compact true \
+--controlflowflattening true \
+--controlflowflatteningthreshold 1 \
+--deadcodeinjection true \
+--deadcodeinjectionthreshold 1 \
+--identifiernamesgenerator hexadecimal \
+--renameglobals true \
+--stringarray true \
+--stringarrayencoding 'rc4' \
+--stringarraythreshold 1 \
+--transformobjectkeys true \
+--unicodeescapesequence true
+
+混淆加密2里面的自定义混淆，对应喂饭大佬的配置，修改用：	
+https://www.lddgo.net/encrypt/js
+{
+    "compact": true,
+    "controlFlowFlattening": true,
+    "controlFlowFlatteningThreshold": 1,
+    "deadCodeInjection": true,
+    "deadCodeInjectionThreshold": 1,
+    "identifierNamesGenerator": "hexadecimal",
+    "renameGlobals": true,
+    "stringArray": true,
+    "stringArrayEncoding": [
+        "rc4"
+    ],
+    "stringArrayThreshold": 1,
+    "transformObjectKeys": true,
+    "unicodeEscapeSequence": true
+}
