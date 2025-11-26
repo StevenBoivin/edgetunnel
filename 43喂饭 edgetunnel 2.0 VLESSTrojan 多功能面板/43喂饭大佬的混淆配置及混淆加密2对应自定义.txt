@@ -1,0 +1,164 @@
+喂饭大佬的混淆配置：
+--compact true \
+--controlflowflattening true \
+--controlflowflatteningthreshold 1 \
+--deadcodeinjection true \
+--deadcodeinjectionthreshold 1 \
+--identifiernamesgenerator hexadecimal \
+--renameglobals true \
+--stringarray true \
+--stringarrayencoding 'rc4' \
+--stringarraythreshold 1 \
+--transformobjectkeys true \
+--unicodeescapesequence true
+
+混淆加密2里面的自定义混淆，对应喂饭大佬的配置，修改用：	
+https://www.lddgo.net/encrypt/js
+{
+    "compact": true,
+    "controlFlowFlattening": true,
+    "controlFlowFlatteningThreshold": 1,
+    "deadCodeInjection": true,
+    "deadCodeInjectionThreshold": 1,
+    "identifierNamesGenerator": "hexadecimal",
+    "renameGlobals": true,
+    "stringArray": true,
+    "stringArrayEncoding": [
+        "rc4"
+    ],
+    "stringArrayThreshold": 1,
+    "transformObjectKeys": true,
+    "unicodeEscapeSequence": true
+}
+
+
+下面是分段测试混淆：
+第一阶段（绝对安全）：
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled"
+}
+成功
+
+第二阶段（添加字符串混淆）：
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled",
+    "splitStrings": true,
+    "splitStringsChunkLength": 10
+}
+成功
+
+第三阶段（添加数字混淆）：
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled", 
+    "splitStrings": true,
+    "splitStringsChunkLength": 10,
+    "numbersToExpressions": true
+}
+成功
+
+
+配置4.1：添加字符串数组混淆
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled",
+    "splitStrings": true,
+    "splitStringsChunkLength": 10,
+    "numbersToExpressions": true,
+    "stringArray": true,
+    "stringArrayThreshold": 0.3, 
+    "stringArrayEncoding": ["none"]
+}
+成功
+
+配置4.2：增强字符串数组
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled",
+    "splitStrings": true,
+    "splitStringsChunkLength": 8,
+    "numbersToExpressions": true,
+    "stringArray": true,
+    "stringArrayThreshold": 0.5, 
+    "stringArrayEncoding": ["none"],
+    "stringArrayRotate": true, 
+    "stringArrayShuffle": true 
+}
+成功，可读性降低=60%，性能影响=10-15%，逆向难度=中等
+
+配置5.1：增加字符串数组阈值
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled",
+    "splitStrings": true,
+    "splitStringsChunkLength": 6,  // 缩短片段长度
+    "numbersToExpressions": true,
+    "stringArray": true,
+    "stringArrayThreshold": 0.7,  // 提高阈值
+    "stringArrayEncoding": ["none"],
+    "stringArrayRotate": true,
+    "stringArrayShuffle": true
+}
+成功预期效果：更多字符串被放入字符串数组，可读性降低=70%，性能影响=15-20%，逆向难度=中等偏上
+
+配置5.2：添加字符串包装器
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled",
+    "splitStrings": true,
+    "splitStringsChunkLength": 6,
+    "numbersToExpressions": true,
+    "stringArray": true,
+    "stringArrayThreshold": 0.7,
+    "stringArrayEncoding": ["none"],
+    "stringArrayRotate": true,
+    "stringArrayShuffle": true,
+    "stringArrayWrappersChainedCalls": true,  // 新增
+    "stringArrayWrappersCount": 1,           // 新增
+    "stringArrayIndexShift": true             // 新增
+}
+成功预期效果：字符串访问被包装，可读性降低=80%，性能影响=20-25%，逆向难度=较高
+
+配置5.3：尝试轻度控制流混淆
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled",
+    "splitStrings": true,
+    "splitStringsChunkLength": 6,
+    "numbersToExpressions": true,
+    "stringArray": true,
+    "stringArrayThreshold": 0.7,
+    "stringArrayEncoding": ["none"],
+    "stringArrayRotate": true,
+    "stringArrayShuffle": true,
+    "stringArrayWrappersChainedCalls": true,
+    "stringArrayWrappersCount": 1,
+    "stringArrayIndexShift": true,
+    "controlFlowFlattening": true,            // 谨慎新增
+    "controlFlowFlatteningThreshold": 0.1     // 极低阈值
+}
+成功预期效果：轻度控制流混淆，可读性降低=90%，性能影响=30-40%，逆向难度=高
+
+
+配置6.1：增强控制流混淆
+{
+    "compact": true,
+    "identifierNamesGenerator": "mangled",
+    "splitStrings": true,
+    "splitStringsChunkLength": 4,             // 进一步缩短
+    "numbersToExpressions": true,
+    "stringArray": true,
+    "stringArrayThreshold": 0.8,               // 提高阈值
+    "stringArrayEncoding": ["none"],
+    "stringArrayRotate": true,
+    "stringArrayShuffle": true,
+    "stringArrayWrappersChainedCalls": true,
+    "stringArrayWrappersCount": 2,             // 增加包装器数量
+    "stringArrayIndexShift": true,
+    "controlFlowFlattening": true,
+    "controlFlowFlatteningThreshold": 0.3      // 提高阈值
+}
+成功，可读性降低=95%+，性能影响=40-60%，逆向难度=极高
+
